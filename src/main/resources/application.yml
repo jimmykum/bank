@@ -1,0 +1,4 @@
+spring:
+  data:
+    mongodb:
+       uri: 'mongodb://app_user:app_pass@localhost:27017/bank'

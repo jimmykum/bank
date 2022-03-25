@@ -1,0 +1,56 @@
+package app.api;
+
+import app.api.mapper.AccountMapper;
+import app.api.request.AccountRequest;
+import app.api.response.AccountResponse;
+import app.service.AccountService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
+
+import javax.validation.Valid;
+import java.util.UUID;
+
+@RestController
+@RequestMapping(value = "api")
+@RequiredArgsConstructor
+public class AccountController {
+
+    private final AccountService accountService;
+
+    private final AccountMapper accountMapper;
+
+    @PostMapping("/accounts")
+    public Mono<ResponseEntity<AccountResponse>> createAccount(@RequestBody @Valid Mono<AccountRequest> accountRequest) {
+        return accountRequest.map(req -> Mono.just(accountMapper.toAccount(req)))
+                .flatMap(accountService::createAccount)
+                .map(acc -> ResponseEntity.status(HttpStatus.OK).body(accountMapper.toAccountResponse(acc)));
+    }
+
+    @GetMapping("/accounts/{id}")
+    public Mono<ResponseEntity<AccountResponse>> getAccount(@PathVariable String id) {
+           return Mono.just(UUID.fromString(id))
+                    .flatMap(accountService::getAccount)
+                   .map(accountMapper::toAccountResponse)
+                   .map(res -> ResponseEntity.status(HttpStatus.OK).body(res))
+                   .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/accounts")
+    public Mono<ResponseEntity<AccountResponse>> findByDocumentNumber(@RequestParam String document_number){
+        return accountService.findByDocumentNumber(document_number)
+                .map(accountMapper::toAccountResponse)
+                .map(res -> ResponseEntity.status(HttpStatus.OK).body(res))
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+
+
+    }
+}
