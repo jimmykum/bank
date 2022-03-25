@@ -1,13 +1,11 @@
 package app.service;
 
-import app.model.OperationsType;
+import app.document.OperationsType;
 import app.repository.OperationsTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.PostConstruct;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -23,10 +21,10 @@ public class OperationsTypeServiceImpl implements  OperationsTypeService {
 
     @Override
     public void createOperationsType(OperationsType operationsType) {
-        operationsTypeRepository.save(operationsType).block();
+        operationsTypeRepository.save(operationsType);
     }
 
-    @PostConstruct
+   // @PostConstruct
     public void initilize(){
         if (isOperationsTypeDefined()) {
             System.out.println("All operations Types r created");

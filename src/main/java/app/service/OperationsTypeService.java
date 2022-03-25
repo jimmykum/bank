@@ -1,6 +1,6 @@
 package app.service;
 
-import app.model.OperationsType;
+import app.document.OperationsType;
 
 public interface OperationsTypeService {
     boolean isOperationsTypeDefined();

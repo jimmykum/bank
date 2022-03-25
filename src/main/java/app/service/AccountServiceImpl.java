@@ -1,6 +1,6 @@
 package app.service;
 
-import app.model.Account;
+import app.document.Account;
 import app.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

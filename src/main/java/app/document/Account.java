@@ -1,4 +1,4 @@
-package app.model;
+package app.document;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package app.repository;
 
-import app.model.Account;
+import app.document.Account;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
