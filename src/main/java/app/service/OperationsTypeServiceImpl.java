@@ -6,25 +6,33 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class OperationsTypeServiceImpl implements  OperationsTypeService {
+    private final static List<String> ALL_OP_TYPE_IDS = List.of("1","2","3","4");
     private final OperationsTypeRepository operationsTypeRepository;
+
     @Override
     public boolean isOperationsTypeDefined() {
         List<OperationsType> collections = operationsTypeRepository.findAll().collectList().block();
-        return !CollectionUtils.isEmpty(collections);
+        if (CollectionUtils.isEmpty(collections)) {
+            return false;
+        }
+        List<String> allTypesIds = collections.stream().map(OperationsType::getOperationsTypeId).collect(Collectors.toList());
+        return allTypesIds.containsAll(ALL_OP_TYPE_IDS);
     }
 
 
     @Override
     public void createOperationsType(OperationsType operationsType) {
-        operationsTypeRepository.save(operationsType);
+        operationsTypeRepository.save(operationsType).block();
     }
 
-   // @PostConstruct
+    @PostConstruct
     public void initilize(){
         if (isOperationsTypeDefined()) {
             System.out.println("All operations Types r created");

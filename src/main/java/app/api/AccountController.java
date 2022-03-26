@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -33,10 +34,12 @@ public class AccountController {
     private final AccountMapper accountMapper;
 
     @PostMapping("/accounts")
-    public Mono<ResponseEntity<AccountResponse>> createAccount(@RequestBody @Valid Mono<AccountRequest> accountRequest) {
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<AccountResponse> createAccount(@RequestBody @Valid Mono<AccountRequest> accountRequest) {
         return accountRequest.map(req -> Mono.just(accountMapper.toAccount(req)))
                 .flatMap(accountService::createAccount)
-                .map(acc -> ResponseEntity.status(HttpStatus.OK).body(accountMapper.toAccountResponse(acc)));
+                .map(accountMapper::toAccountResponse);
+                //.map(acc -> ResponseEntity.status(HttpStatus.OK).body(accountMapper.toAccountResponse(acc)));
     }
 
     @GetMapping("/accounts/{id}")
@@ -64,12 +67,4 @@ public class AccountController {
                         .map(accountMapper::toAccountResponse)
                         .switchIfEmpty(Mono.error(new EntityNotFoundException("Account")));
     }
-
-    /*@GetMapping("/accounts")
-    public Flux<ResponseEntity<AccountResponse>> findAllAccounts() {
-        return accountService.findAllAccounts()
-                .map(accountMapper::toAccountResponse)
-                .map(res -> ResponseEntity.status(HttpStatus.OK).body(res))
-                .defaultIfEmpty(ResponseEntity.notFound().build());
-    }*/
 }
