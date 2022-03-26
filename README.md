@@ -15,6 +15,10 @@
   </li>
   <li> Integration test uses the docker mongodb . (Embedded mongodb is not used)</li>
 </ul>
+
+  Running the application on windows. <br/>
+  A script is provided which will start the docker compose service and will run the spring boot application also. <br/>
+  Usage :  D:\pro2022\pismo> .\run.bat
    
 
 
