@@ -18,7 +18,13 @@
 
   Running the application on windows. <br/>
   A script is provided which will start the docker compose service and will run the spring boot application also. <br/>
-  Usage :  D:\pro2022\pismo> .\run.bat
+  Usage :  D:\pro2022\pismo> .\run.bat  
+
+  <br/>
+  A Postman collection is also provided - Pismo.postman_collection.json which includes all the api's 
+ <br/>
+
+   Swagger Doc url - http://localhost:8080/webjars/swagger-ui/index.html#/
    
 
 
