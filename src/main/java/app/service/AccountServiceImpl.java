@@ -4,6 +4,7 @@ import app.document.Account;
 import app.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -16,12 +17,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Mono<Account> createAccount(Mono<Account> account) {
-        return account.map(Account::getDocumentNumber)
-                .flatMap(accountRepository::findAllByDocumentNumber)
-                .switchIfEmpty(createNewAccount(account));
-    }
-
-    public Mono<Account> createNewAccount(Mono<Account> account) {
         return account.map(acc -> {
                             acc.setAccountId(UUID.randomUUID());
                             return acc;
@@ -36,7 +31,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Mono<Account> findByDocumentNumber(String documentNumber) {
-        return accountRepository.findAllByDocumentNumber(documentNumber);
+    public Flux<Account> findByDocumentNumber(String documentNumber) {
+        return  accountRepository.findAllByDocumentNumber(documentNumber);
+    }
+
+    @Override
+    public Flux<Account> findAllAccounts() {
+        return accountRepository.findAll();
     }
 }

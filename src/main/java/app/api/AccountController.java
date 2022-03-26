@@ -3,10 +3,12 @@ package app.api;
 import app.api.mapper.AccountMapper;
 import app.api.request.AccountRequest;
 import app.api.response.AccountResponse;
+import app.exception.EntityNotFoundException;
 import app.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -45,12 +49,27 @@ public class AccountController {
     }
 
     @GetMapping("/accounts")
-    public Mono<ResponseEntity<AccountResponse>> findByDocumentNumber(@RequestParam String document_number){
-        return accountService.findByDocumentNumber(document_number)
+    public Flux<AccountResponse> findByDocumentNumber(@RequestParam Optional<String> document_number) {
+        return
+                Mono.just(document_number.orElse(""))
+                        .flatMapMany(doc -> {
+                            System.out.println(StringUtils.hasText(doc));
+                                    if (StringUtils.hasText(doc)) {
+                                        return accountService.findByDocumentNumber(doc);
+                                    } else {
+                                        return accountService.findAllAccounts();
+                                    }
+                                }
+                        )
+                        .map(accountMapper::toAccountResponse)
+                        .switchIfEmpty(Mono.error(new EntityNotFoundException("Account")));
+    }
+
+    /*@GetMapping("/accounts")
+    public Flux<ResponseEntity<AccountResponse>> findAllAccounts() {
+        return accountService.findAllAccounts()
                 .map(accountMapper::toAccountResponse)
                 .map(res -> ResponseEntity.status(HttpStatus.OK).body(res))
                 .defaultIfEmpty(ResponseEntity.notFound().build());
-
-
-    }
+    }*/
 }

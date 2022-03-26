@@ -3,6 +3,7 @@ package app.api;
 import app.api.mapper.TransactionMapper;
 import app.api.request.TransactionRequest;
 import app.api.response.TransactionResponse;
+import app.exception.BadInputException;
 import app.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class TransactionController {
     public Mono<ResponseEntity<TransactionResponse>> createTransaction(@RequestBody @Valid Mono<TransactionRequest> transactionRequest) {
         return transactionRequest.map(req -> Mono.just(transactionMapper.toTransaction(req)))
                 .flatMap(transactionService::createTransaction)
-                .map(trans -> ResponseEntity.status(HttpStatus.OK).body(transactionMapper.toTransactionResponse(trans)));
+                .map(trans -> ResponseEntity.status(HttpStatus.OK).body(transactionMapper.toTransactionResponse(trans)))
+                .onErrorResume(ex -> Mono.error(new BadInputException(ex.getMessage())));
     }
 }
