@@ -4,6 +4,7 @@ import app.document.Transaction;
 import app.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
@@ -22,5 +23,10 @@ public class TransactionServiceImpl implements TransactionService {
                     return trans;
                 })
                 .flatMap(transactionRepository::save);
+    }
+
+    @Override
+    public Flux<Transaction> getAllTransaction() {
+        return transactionRepository.findAll();
     }
 }
