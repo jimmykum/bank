@@ -6,6 +6,7 @@ import app.api.response.TransactionResponse;
 import app.exception.BadInputException;
 import app.exception.EntityNotFoundException;
 import app.service.TransactionService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class TransactionController {
     private final TransactionMapper transactionMapper;
     private final TransactionService transactionService;
 
+    @Operation(summary = "Create a new Transaction")
     @PostMapping("transactions")
     public Mono<ResponseEntity<TransactionResponse>> createTransaction(@RequestBody @Valid Mono<TransactionRequest> transactionRequest) {
         return transactionRequest.map(req -> Mono.just(transactionMapper.toTransaction(req)))
@@ -34,6 +36,7 @@ public class TransactionController {
                 .onErrorResume(ex -> Mono.error(new BadInputException(ex.getMessage())));
     }
 
+    @Operation(summary = "Get all Transactions")
     @GetMapping("transactions")
     public Flux<TransactionResponse> getAllTransaction() {
        return transactionService.getAllTransaction()

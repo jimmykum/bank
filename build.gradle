@@ -23,12 +23,8 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 	compileOnly 'org.projectlombok:lombok:1.18.22'
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
-	// https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
-
-
-
-
+	implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.6.6'
 }
 
 

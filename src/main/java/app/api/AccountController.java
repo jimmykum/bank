@@ -5,6 +5,7 @@ import app.api.request.AccountRequest;
 import app.api.response.AccountResponse;
 import app.exception.EntityNotFoundException;
 import app.service.AccountService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ public class AccountController {
 
     private final AccountMapper accountMapper;
 
+    @Operation(summary = "Create a new Account")
     @PostMapping("/accounts")
     @ResponseStatus(HttpStatus.OK)
     public Mono<AccountResponse> createAccount(@RequestBody @Valid Mono<AccountRequest> accountRequest) {
@@ -42,6 +44,7 @@ public class AccountController {
                 //.map(acc -> ResponseEntity.status(HttpStatus.OK).body(accountMapper.toAccountResponse(acc)));
     }
 
+    @Operation(summary = "Get an account by providing account_id")
     @GetMapping("/accounts/{id}")
     public Mono<ResponseEntity<AccountResponse>> getAccount(@PathVariable String id) {
            return Mono.just(UUID.fromString(id))
@@ -51,6 +54,7 @@ public class AccountController {
                    .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Get all Accounts")
     @GetMapping("/accounts")
     public Flux<AccountResponse> findByDocumentNumber(@RequestParam Optional<String> document_number) {
         return
