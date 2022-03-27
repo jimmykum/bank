@@ -14,8 +14,6 @@ import reactor.core.publisher.Mono;
 public class GlobalExceptionHandler implements WebExceptionHandler {
 
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
-        System.out.println("-----"+ex);
-
         if (ex instanceof EntityNotFoundException) {
             exchange.getResponse().setStatusCode(HttpStatus.NOT_FOUND);
             DataBuffer db = new DefaultDataBufferFactory().wrap(ex.getMessage().getBytes());

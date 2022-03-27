@@ -5,6 +5,7 @@ import app.repository.OperationsTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -27,9 +28,16 @@ public class OperationsTypeServiceImpl implements  OperationsTypeService {
     }
 
 
+
+
     @Override
     public void createOperationsType(OperationsType operationsType) {
         operationsTypeRepository.save(operationsType).block();
+    }
+
+    @Override
+    public Mono<Integer> getMultiplier(String operation_type_id) {
+        return operationsTypeRepository.findById(operation_type_id).log().map(OperationsType::getMultiplier);
     }
 
     @PostConstruct
@@ -37,10 +45,11 @@ public class OperationsTypeServiceImpl implements  OperationsTypeService {
         if (isOperationsTypeDefined()) {
             System.out.println("All operations Types r created");
         } else {
+            operationsTypeRepository.deleteAll().block();
             OperationsType one = OperationsType.builder().operationsTypeId("1").description("Normal Purchase").multiplier(-1).build();
             OperationsType two = OperationsType.builder().operationsTypeId("2").description("Purchase with installments").multiplier(1).build();
             OperationsType three = OperationsType.builder().operationsTypeId("3").description("Withdrawal").multiplier(-1).build();
-            OperationsType four = OperationsType.builder().operationsTypeId("3").description("Credit Voucher").multiplier(1).build();
+            OperationsType four = OperationsType.builder().operationsTypeId("4").description("Credit Voucher").multiplier(1).build();
             List<OperationsType> operationsTypeList = List.of(one,two,three,four);
             operationsTypeList.forEach(this::createOperationsType);
 

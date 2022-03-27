@@ -5,11 +5,10 @@ import app.api.request.TransactionRequest;
 import app.api.response.TransactionResponse;
 import app.exception.BadInputException;
 import app.exception.EntityNotFoundException;
+import app.service.OperationsTypeService;
 import app.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,13 +25,14 @@ import javax.validation.Valid;
 public class TransactionController {
     private final TransactionMapper transactionMapper;
     private final TransactionService transactionService;
+    private final OperationsTypeService operationsTypeService;
 
     @Operation(summary = "Create a new Transaction")
     @PostMapping("transactions")
-    public Mono<ResponseEntity<TransactionResponse>> createTransaction(@RequestBody @Valid Mono<TransactionRequest> transactionRequest) {
-        return transactionRequest.map(req -> Mono.just(transactionMapper.toTransaction(req)))
+    public Mono<TransactionResponse> createTransaction(@RequestBody @Valid Mono<TransactionRequest> transactionRequest) {
+        return transactionRequest.map(transactionMapper::toTransaction)
                 .flatMap(transactionService::createTransaction)
-                .map(trans -> ResponseEntity.status(HttpStatus.OK).body(transactionMapper.toTransactionResponse(trans)))
+                .map(transactionMapper::toTransactionResponse)
                 .onErrorResume(ex -> Mono.error(new BadInputException(ex.getMessage())));
     }
 

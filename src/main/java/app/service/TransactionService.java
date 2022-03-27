@@ -5,6 +5,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface TransactionService {
-    Mono<Transaction> createTransaction(Mono<Transaction> transaction);
+    Mono<Transaction> createTransaction(Transaction transaction);
     Flux<Transaction> getAllTransaction();
 }

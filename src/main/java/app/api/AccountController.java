@@ -60,7 +60,6 @@ public class AccountController {
         return
                 Mono.just(document_number.orElse(""))
                         .flatMapMany(doc -> {
-                            System.out.println(StringUtils.hasText(doc));
                                     if (StringUtils.hasText(doc)) {
                                         return accountService.findByDocumentNumber(doc);
                                     } else {
