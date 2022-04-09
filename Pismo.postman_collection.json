@@ -31,7 +31,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/accounts/c1fb3b4e-6307-43f5-ae36-a6f367624b80",
+					"raw": "http://localhost:8080/api/accounts/80f67697-035d-436d-b4ad-0d8c50b1f034",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -40,7 +40,7 @@
 					"path": [
 						"api",
 						"accounts",
-						"c1fb3b4e-6307-43f5-ae36-a6f367624b80"
+						"80f67697-035d-436d-b4ad-0d8c50b1f034"
 					]
 				}
 			},
@@ -52,7 +52,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/accounts?document_number=22333444",
+					"raw": "http://localhost:8080/api/accounts?document_number=123456",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -65,7 +65,7 @@
 					"query": [
 						{
 							"key": "document_number",
-							"value": "22333444"
+							"value": "123456"
 						}
 					]
 				}
@@ -79,7 +79,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"document_number\" : \"23234565\"\r\n}",
+					"raw": "{\r\n    \"document_number\" : \"123456\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -108,7 +108,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n \"account_id\": \"82baa1d3-35ab-43fc-a185-f491dc3cdbed\",\r\n \"operation_type_id\": 4,\r\n \"amount\": 23.99\r\n}",
+					"raw": "{\r\n \"account_id\": \"80f67697-035d-436d-b4ad-0d8c50b1f034\",\r\n \"operation_type_id\": 4,\r\n \"amount\": 50\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -145,6 +145,28 @@
 					"path": [
 						"api",
 						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Account's All Transaction",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/transactions/account/80f67697-035d-436d-b4ad-0d8c50b1f034",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"transactions",
+						"account",
+						"80f67697-035d-436d-b4ad-0d8c50b1f034"
 					]
 				}
 			},
