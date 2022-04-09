@@ -15,7 +15,6 @@ import java.util.UUID;
 @Data
 @Builder
 @Document
-@ToString
 public class Account {
     @Id
     private UUID accountId;

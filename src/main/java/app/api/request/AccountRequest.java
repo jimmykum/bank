@@ -19,7 +19,6 @@ import java.util.UUID;
 @Setter
 @Builder
 @Data
-@ToString
 public class AccountRequest {
     @JsonProperty("account_id")
     private UUID accountId;

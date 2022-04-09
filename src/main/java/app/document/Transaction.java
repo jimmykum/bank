@@ -17,7 +17,6 @@ import java.util.UUID;
 @Data
 @Builder
 @Document
-@ToString
 public class Transaction {
     @Id
     private UUID transactionId;

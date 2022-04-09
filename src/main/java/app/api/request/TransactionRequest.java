@@ -19,7 +19,6 @@ import java.util.UUID;
 @Setter
 @Builder
 @Data
-@ToString
 public class TransactionRequest {
     @NotNull
     @JsonProperty("account_id")
