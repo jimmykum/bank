@@ -5,6 +5,7 @@ import app.repository.OperationsTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
@@ -40,6 +41,11 @@ public class OperationsTypeServiceImpl implements  OperationsTypeService {
         return operationsTypeRepository.findById(operation_type_id).log().map(OperationsType::getMultiplier);
     }
 
+    @Override
+    public Flux<Integer> getAllDebitOperationsId() {
+        return Flux.just(1,2,3);
+    }
+
     @PostConstruct
     public void initilize(){
         if (isOperationsTypeDefined()) {
@@ -47,12 +53,11 @@ public class OperationsTypeServiceImpl implements  OperationsTypeService {
         } else {
             operationsTypeRepository.deleteAll().block();
             OperationsType one = OperationsType.builder().operationsTypeId("1").description("Normal Purchase").multiplier(-1).build();
-            OperationsType two = OperationsType.builder().operationsTypeId("2").description("Purchase with installments").multiplier(1).build();
+            OperationsType two = OperationsType.builder().operationsTypeId("2").description("Purchase with installments").multiplier(-1).build();
             OperationsType three = OperationsType.builder().operationsTypeId("3").description("Withdrawal").multiplier(-1).build();
             OperationsType four = OperationsType.builder().operationsTypeId("4").description("Credit Voucher").multiplier(1).build();
             List<OperationsType> operationsTypeList = List.of(one,two,three,four);
             operationsTypeList.forEach(this::createOperationsType);
-
         }
     }
 }

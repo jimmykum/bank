@@ -23,6 +23,7 @@ public class Transaction {
     private UUID transactionId;
     private UUID accountId;
     private BigDecimal amount;
+    private BigDecimal balance;
     private String operationTypeId;
     private Instant eventDate;
 }

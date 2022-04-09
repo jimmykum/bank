@@ -29,5 +29,6 @@ public class TransactionResponse {
     @JsonProperty("operation_type_id")
     private String operationTypeId;
     private BigDecimal amount;
+    private BigDecimal balance;
     private Instant eventDate;
 }

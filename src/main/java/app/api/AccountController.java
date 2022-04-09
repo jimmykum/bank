@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "api")
+@RequestMapping(value = "api/accounts")
 @RequiredArgsConstructor
 public class AccountController {
 
@@ -35,17 +35,16 @@ public class AccountController {
     private final AccountMapper accountMapper;
 
     @Operation(summary = "Create a new Account")
-    @PostMapping("/accounts")
+    @PostMapping()
     @ResponseStatus(HttpStatus.OK)
     public Mono<AccountResponse> createAccount(@RequestBody @Valid Mono<AccountRequest> accountRequest) {
         return accountRequest.map(req -> Mono.just(accountMapper.toAccount(req)))
                 .flatMap(accountService::createAccount)
                 .map(accountMapper::toAccountResponse);
-                //.map(acc -> ResponseEntity.status(HttpStatus.OK).body(accountMapper.toAccountResponse(acc)));
     }
 
     @Operation(summary = "Get an account by providing account_id")
-    @GetMapping("/accounts/{id}")
+    @GetMapping("/{id}")
     public Mono<ResponseEntity<AccountResponse>> getAccount(@PathVariable String id) {
            return Mono.just(UUID.fromString(id))
                     .flatMap(accountService::getAccount)
@@ -55,7 +54,7 @@ public class AccountController {
     }
 
     @Operation(summary = "Get all Accounts")
-    @GetMapping("/accounts")
+    @GetMapping()
     public Flux<AccountResponse> findByDocumentNumber(@RequestParam Optional<String> document_number) {
         return
                 Mono.just(document_number.orElse(""))
